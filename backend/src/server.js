@@ -6,6 +6,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
+const applicationRoutes = require("./routes/applicationRoutes");
 
 dotenv.config();
 connectDB();
@@ -15,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
-
+app.use("/api/applications", applicationRoutes);
 app.get("/", (req, res) => {
   res.send("Interview Track API is running");
 });
