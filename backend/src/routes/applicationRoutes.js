@@ -5,12 +5,15 @@ const {
     getApplications,
     getApplicationById,
     updateApplication,
-    deleteApplication
+    deleteApplication,
+    getDashboardSummary,
  } = require("../controllers/applicationController");
 
 const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
+
+router.get("/summary", protect, getDashboardSummary);
 
 router
     .route("/")

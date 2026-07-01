@@ -7,20 +7,33 @@ import { useAuth } from "../context/AuthContext";
 function Dashboard() {
   const { user } = useAuth();
 
-  const [applications, setApplications] = useState([]);
+  const [summary, setSummary] = useState({
+    total: 0,
+    applied: 0,
+    interviews: 0,
+    offers: 0,
+    rejected: 0,
+  });
+
+  const [recentApplications, setRecentApplications] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const fetchApplications = async () => {
+  const fetchDashboardData = async () => {
     try {
       setLoading(true);
       setError("");
 
-      const response = await api.get("/applications");
+      const summaryResponse = await api.get("/applications/summary");
+      const applicationsResponse = await api.get("/applications");
 
-      const applicationsData = response.data.data || response.data;
+      setSummary(summaryResponse.data.data || summaryResponse.data);
 
-      setApplications(applicationsData);
+      const applicationsData =
+        applicationsResponse.data.data || applicationsResponse.data;
+
+      setRecentApplications(applicationsData.slice(0, 3));
     } catch (error) {
       const message =
         error.response?.data?.message || "Failed to load dashboard data.";
@@ -32,30 +45,8 @@ function Dashboard() {
   };
 
   useEffect(() => {
-    fetchApplications();
+    fetchDashboardData();
   }, []);
-
-  const totalApplications = applications.length;
-
-  const appliedCount = applications.filter(
-    (application) => application.status === "Applied"
-  ).length;
-
-  const interviewCount = applications.filter((application) =>
-    ["HR Interview", "Technical Interview", "Final Interview"].includes(
-      application.status
-    )
-  ).length;
-
-  const offerCount = applications.filter(
-    (application) => application.status === "Offer"
-  ).length;
-
-  const rejectedCount = applications.filter(
-    (application) => application.status === "Rejected"
-  ).length;
-
-  const recentApplications = applications.slice(0, 3);
 
   return (
     <div>
@@ -78,27 +69,27 @@ function Dashboard() {
         <>
           <div className="stats-grid">
             <div className="stat-card">
-              <h3>{totalApplications}</h3>
+              <h3>{summary.total}</h3>
               <p>Total Applications</p>
             </div>
 
             <div className="stat-card">
-              <h3>{appliedCount}</h3>
+              <h3>{summary.applied}</h3>
               <p>Applied</p>
             </div>
 
             <div className="stat-card">
-              <h3>{interviewCount}</h3>
+              <h3>{summary.interviews}</h3>
               <p>Interview Stage</p>
             </div>
 
             <div className="stat-card">
-              <h3>{offerCount}</h3>
+              <h3>{summary.offers}</h3>
               <p>Offers</p>
             </div>
 
             <div className="stat-card">
-              <h3>{rejectedCount}</h3>
+              <h3>{summary.rejected}</h3>
               <p>Rejected</p>
             </div>
           </div>

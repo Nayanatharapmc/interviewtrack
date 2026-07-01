@@ -116,10 +116,46 @@ const deleteApplication = async (req, res) => {
     }
 };
 
+// @desc   Get dashboard summary for the logged-in user
+// @route  GET /api/applications/summary
+// @access Private
+const getDashboardSummary = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const total = await JobApplication.countDocuments({ user: userId });
+        const applied = await JobApplication.countDocuments({ user: userId, status: 'Applied' });
+        const interviews = await JobApplication.countDocuments({ 
+            user: userId, 
+            status: { 
+                $in: ['HR Interview', 'Technical Interview', 'Final Interview'] 
+            } 
+        });
+        const offers = await JobApplication.countDocuments({ user: userId, status: 'Offered' });
+        const rejected = await JobApplication.countDocuments({ user: userId, status: 'Rejected' });
+        
+        res.status(200).json({
+            success: true,
+            data: {
+                total,
+                applied,
+                interviews,
+                offers,
+                rejected
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
 module.exports = {
     createJobApplication,
     getApplications,
     getApplicationById,
     updateApplication,
     deleteApplication,
+    getDashboardSummary,
 };
