@@ -1,12 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
     const navigate = useNavigate();
-    const token = localStorage.getItem("token");
+    const { isAuthenticated, user, logout } = useAuth();
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        logout();
         navigate("/login");
     };
 
@@ -15,8 +15,9 @@ function Navbar() {
             <h2>InterviewTrack</h2>
 
             <div className="nav-links">
-                {token ? (
+                {isAuthenticated ? (
                     <>
+                        <span className="user-name">Hi, {user?.name}</span>
                         <Link to="/dashboard">Dashboard</Link>
                         <Link to="/applications">Applications</Link>
                         <Link to="/applications/new">Add Application</Link>
