@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-function ApplicationCard({ application }) {
+function ApplicationCard({ application, onDelete }) {
   return (
     <div className="application-card">
         <div className="application-card-header">
@@ -34,6 +34,12 @@ function ApplicationCard({ application }) {
             View Job
           </a>
         )}
+
+        <button  
+            className='delete-link-button' 
+            onClick={() => onDelete(application._id)}>
+          Delete
+        </button>
       </div>
     </div>
   );

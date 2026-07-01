@@ -47,6 +47,27 @@ function Applications() {
     fetchApplications();
   }, [selectedStatus]);
 
+  const handleDelete = async (applicationId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this application?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await api.delete(`/applications/${applicationId}`);
+      setApplications((currentApplications) =>
+        currentApplications.filter((app) => app._id !== applicationId)
+      );
+    }
+    catch (error) {
+          const message =
+            error.response?.data?.message || "Failed to delete application.";
+
+          setError(message);
+        }
+      };
+
   return (
     <div>
       <div className="page-header">
@@ -93,6 +114,7 @@ function Applications() {
             <ApplicationCard
               key={application._id}
               application={application}
+              onDelete={() => handleDelete(application._id)}
             />
           ))}
         </div>
