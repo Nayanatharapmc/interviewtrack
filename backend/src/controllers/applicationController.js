@@ -21,23 +21,66 @@ const createJobApplication = async (req, res) => {
     }
 };
 
-// @desc    Get all job applications for the logged-in user
+// @desc    Get all job applications of logged-in user with search, filter, and sort
 // @route   GET /api/applications
 // @access  Private
 const getApplications = async (req, res) => {
     try {
-        const { status } = req.query;
+        const { status, search, sort } = req.query;
 
-        const filter = { user: req.user.id };
-        if (status) {
+        const filter = {
+            user: req.user._id,
+        };
+
+        // Filter by status
+        if (status && status !== "All") {
             filter.status = status;
         }
 
-        const applications = await JobApplication.find(filter).sort({ applicationDate: -1 });
-        res.status(200).json(applications);
+        // Search by company name or job title
+        if (search) {
+            filter.$or = [
+                {
+                    companyName: {
+                        $regex: search,
+                        $options: "i",
+                    },
+                },
+                {
+                    jobTitle: {
+                        $regex: search,
+                        $options: "i",
+                    },
+                },
+            ];
+        }
+
+        // Sort options
+        let sortOption = { createdAt: -1 };
+
+        if (sort === "oldest") {
+            sortOption = { createdAt: 1 };
+        }
+
+        if (sort === "company") {
+            sortOption = { companyName: 1 };
+        }
+
+        if (sort === "status") {
+            sortOption = { status: 1 };
+        }
+
+        const applications = await JobApplication.find(filter).sort(sortOption);
+
+        res.status(200).json({
+            success: true,
+            count: applications.length,
+            data: applications,
+        });
     } catch (error) {
         res.status(500).json({
-            message: error.message
+            success: false,
+            message: error.message,
         });
     }
 };

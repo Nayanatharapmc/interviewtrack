@@ -459,3 +459,95 @@ button {
 .delete-link-button:hover {
   text-decoration: underline;
 }
+
+.applications-toolbar {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.search-form {
+  display: flex;
+  gap: 10px;
+}
+
+.search-form input {
+  flex: 1;
+  padding: 11px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.search-form input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.search-form button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 11px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.toolbar-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: end;
+}
+
+.toolbar-control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.toolbar-control label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 14px;
+}
+
+.toolbar-control select {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+}
+
+.clear-filter-button {
+  background: white;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.results-summary {
+  margin-bottom: 14px;
+  color: #4b5563;
+}
+
+.results-summary p {
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .search-form {
+    flex-direction: column;
+  }
+
+  .toolbar-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
