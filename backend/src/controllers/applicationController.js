@@ -1,4 +1,4 @@
-const JobApplication = require("../models/jobApplication");
+const JobApplication = require("../models/JobApplication");
 
 // @desc    Create a new job application
 // @route   POST /api/applications
